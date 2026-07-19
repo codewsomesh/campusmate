@@ -53,14 +53,14 @@ export default function Navbar() {
         {/* Right Side */}
         <div className="flex items-center gap-3">
           <Link
-            href="/"
+            href="/login"
             className="px-5 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
           >
             Login
           </Link>
 
           <Link
-            href="/"
+            href="/signup"
             className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition shadow-md"
           >
             Sign Up

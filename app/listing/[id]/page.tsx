@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { listings } from "@/data/listings";
+import { getListing } from "@/lib/listings";
 import { notFound } from "next/navigation";
 import {
   FaMapMarkerAlt,
@@ -15,7 +15,7 @@ export default async function ListingPage({
 }) {
   const { id } = await params;
 
-  const listing = listings.find((item) => item.id === Number(id));
+  const listing = await getListing(id);
 
   if (!listing) {
     notFound();
@@ -25,7 +25,6 @@ export default async function ListingPage({
     <main className="min-h-screen bg-gray-100 py-12">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-10 bg-white rounded-3xl shadow-xl overflow-hidden">
-          {/* Image */}
           <div className="p-8">
             <Image
               src={listing.image}
@@ -36,7 +35,6 @@ export default async function ListingPage({
             />
           </div>
 
-          {/* Details */}
           <div className="p-8">
             <span className="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
               {listing.category}
@@ -56,12 +54,9 @@ export default async function ListingPage({
             </div>
 
             <p className="mt-8 leading-8 text-gray-600">
-              This item is in excellent condition and has been carefully
-              maintained by the owner. Perfect for students looking for a
-              reliable product at an affordable price.
+              {listing.description}
             </p>
 
-            {/* Seller Card */}
             <div className="mt-10 rounded-2xl bg-gray-50 p-6 border">
               <h3 className="text-lg font-bold text-gray-800 mb-5">
                 Seller Information
@@ -70,7 +65,7 @@ export default async function ListingPage({
               <div className="space-y-4">
                 <div className="flex items-center text-gray-600 gap-3">
                   <FaUser className="text-blue-600" />
-                  <span>{listing.seller}</span>
+                  <span>{listing.seller_name}</span>
                 </div>
 
                 <div className="flex items-center text-gray-600 gap-3">
@@ -80,7 +75,9 @@ export default async function ListingPage({
 
                 <div className="flex items-center text-gray-600 gap-3">
                   <FaCalendarAlt className="text-blue-600" />
-                  <span>Posted Recently</span>
+                  <span>
+                    {new Date(listing.created_at).toLocaleDateString()}
+                  </span>
                 </div>
               </div>
             </div>

@@ -1,7 +1,8 @@
 import ListingCard from "./ListingCard";
-import { listings } from "@/data/listings";
+import { getListings } from "@/lib/listings";
 
-export default function LatestListings() {
+export default async function LatestListings() {
+  const listings = await getListings();
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">

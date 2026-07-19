@@ -1,9 +1,12 @@
 export interface Listing {
-  id: number;
+  id: string;
   title: string;
+  description: string;
   price: number;
-  image: string;
   category: string;
-  seller: string;
+  image: string;
   location: string;
+  seller_name: string;
+  seller_id: string;
+  created_at: string;
 }

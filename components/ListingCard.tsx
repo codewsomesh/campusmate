@@ -51,7 +51,9 @@ export default function ListingCard({ listing }: Props) {
             <div>
               <p className="text-xs text-gray-400">Seller</p>
 
-              <p className="font-semibold text-gray-700">{listing.seller}</p>
+              <p className="font-semibold text-gray-700">
+                {listing.seller_name}
+              </p>
             </div>
 
             <span className="text-sm text-blue-600 font-semibold">
