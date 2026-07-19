@@ -39,7 +39,7 @@ npm run dev
 Visit:
 
 ```
-http://localhost:3000
+https://campusmate-phi.vercel.app/
 ```
 
 ## Author
