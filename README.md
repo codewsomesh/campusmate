@@ -29,12 +29,6 @@ CampusMate is a modern campus marketplace built for college students to buy, sel
 - Messaging System
 - Advanced Search & Filters
 
-## Getting Started
-
-```bash
-npm install
-npm run dev
-```
 
 Visit:
 
