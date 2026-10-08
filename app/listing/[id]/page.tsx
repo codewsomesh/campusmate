@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { getListing } from "@/lib/listings";
 import { notFound } from "next/navigation";
 import {
@@ -26,11 +25,9 @@ export default async function ListingPage({
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-10 bg-white rounded-3xl shadow-xl overflow-hidden">
           <div className="p-8">
-            <Image
+            <img
               src={listing.image}
               alt={listing.title}
-              width={800}
-              height={600}
               className="rounded-2xl w-full h-[500px] object-cover"
             />
           </div>

@@ -8,11 +8,13 @@ export async function getListings() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error);
+    console.error("GET LISTINGS ERROR:", error);
     return [];
   }
 
-  return (data ?? []) as Listing[];
+  console.log("LISTINGS:", data);
+
+  return data as Listing[];
 }
 
 export async function getListing(id: string) {
@@ -23,7 +25,7 @@ export async function getListing(id: string) {
     .single();
 
   if (error) {
-    console.error(error);
+    console.error("GET LISTING ERROR:", error);
     return null;
   }
 

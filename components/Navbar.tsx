@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FaStore } from "react-icons/fa";
+import UserMenu from "./UserMenu";
 
 export default function Navbar() {
   return (
@@ -51,21 +52,7 @@ export default function Navbar() {
         </div>
 
         {/* Right Side */}
-        <div className="flex items-center gap-3">
-          <Link
-            href="/login"
-            className="px-5 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
-          >
-            Login
-          </Link>
-
-          <Link
-            href="/signup"
-            className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition shadow-md"
-          >
-            Sign Up
-          </Link>
-        </div>
+        <UserMenu />
       </div>
     </nav>
   );

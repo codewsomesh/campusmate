@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { FaMapMarkerAlt, FaHeart } from "react-icons/fa";
 import { Listing } from "@/types/listing";
 
@@ -13,11 +12,9 @@ export default function ListingCard({ listing }: Props) {
       <div className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
         {/* Image */}
         <div className="relative overflow-hidden">
-          <Image
+          <img
             src={listing.image}
             alt={listing.title}
-            width={500}
-            height={300}
             className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
           />
 
