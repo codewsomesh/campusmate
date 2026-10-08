@@ -30,7 +30,7 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/"
+            href="/browse"
             className="text-gray-700 hover:text-blue-600 font-medium transition"
           >
             Browse

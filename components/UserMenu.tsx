@@ -76,6 +76,13 @@ export default function UserMenu() {
       {open && (
         <div className="absolute right-0 mt-3 w-52 rounded-xl border border-gray-200 bg-white py-2 shadow-xl">
           <Link
+            href="/wishlist"
+            onClick={() => setOpen(false)}
+            className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
+          >
+            ❤️ Wishlist
+          </Link>
+          <Link
             href="/my-listings"
             onClick={() => setOpen(false)}
             className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
