@@ -21,9 +21,7 @@ export default function UserMenu() {
       setUser(session?.user ?? null);
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, []);
 
   async function handleLogout() {
@@ -37,14 +35,14 @@ export default function UserMenu() {
       <div className="flex items-center gap-3">
         <Link
           href="/login"
-          className="px-5 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+          className="rounded-lg border border-gray-300 px-5 py-2 text-gray-700 transition hover:bg-gray-100"
         >
           Login
         </Link>
 
         <Link
           href="/signup"
-          className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition shadow-md"
+          className="rounded-lg bg-blue-600 px-5 py-2 text-white shadow-md transition hover:bg-blue-700"
         >
           Sign Up
         </Link>
@@ -58,34 +56,43 @@ export default function UserMenu() {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-gray-100 transition"
+        className="flex items-center gap-3 rounded-xl px-3 py-2 transition hover:bg-gray-100"
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-bold">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
           {username.charAt(0).toUpperCase()}
         </div>
 
         <span className="font-semibold text-gray-800">{username}</span>
 
         <FaChevronDown
-          className={`text-gray-500 text-sm transition-transform ${
+          className={`text-sm text-gray-500 transition-transform ${
             open ? "rotate-180" : ""
           }`}
         />
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-3 w-52 rounded-xl border border-gray-200 bg-white py-2 shadow-xl">
+        <div className="absolute right-0 z-50 mt-3 w-52 rounded-xl border border-gray-200 bg-white py-2 shadow-xl">
           <Link
             href="/wishlist"
             onClick={() => setOpen(false)}
-            className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
+            className="block px-4 py-3 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
           >
             ❤️ Wishlist
           </Link>
+
+          <Link
+            href="/messages"
+            onClick={() => setOpen(false)}
+            className="block px-4 py-3 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
+          >
+            💬 Messages
+          </Link>
+
           <Link
             href="/my-listings"
             onClick={() => setOpen(false)}
-            className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
+            className="block px-4 py-3 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
           >
             My Listings
           </Link>
@@ -93,7 +100,7 @@ export default function UserMenu() {
           <Link
             href="/sell"
             onClick={() => setOpen(false)}
-            className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
+            className="block px-4 py-3 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
           >
             Sell Item
           </Link>
@@ -102,7 +109,7 @@ export default function UserMenu() {
 
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-4 py-3 text-left text-red-600 hover:bg-red-50 transition"
+            className="flex w-full items-center gap-3 px-4 py-3 text-left text-red-600 transition hover:bg-red-50"
           >
             <FaSignOutAlt />
             Logout

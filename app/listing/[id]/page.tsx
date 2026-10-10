@@ -1,5 +1,5 @@
 "use client";
-
+import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -111,7 +111,57 @@ export default function ListingPage() {
   function toastLogin() {
     router.push("/login");
   }
+  async function handleContactSeller() {
+    if (!userId) {
+      toast.error("Please login to contact the seller.");
+      router.push("/login");
+      return;
+    }
 
+    if (!listing) return;
+
+    if (userId === listing.seller_id) {
+      toast.error("You cannot contact yourself about your own listing.");
+      return;
+    }
+
+    const { data: existingConversation, error: findError } = await supabase
+      .from("conversations")
+      .select("id")
+      .eq("listing_id", listing.id)
+      .eq("buyer_id", userId)
+      .eq("seller_id", listing.seller_id)
+      .maybeSingle();
+
+    if (findError) {
+      console.error("FIND CONVERSATION ERROR:", findError);
+      toast.error("Could not open the conversation.");
+      return;
+    }
+
+    if (existingConversation) {
+      router.push(`/messages/${existingConversation.id}`);
+      return;
+    }
+
+    const { data: newConversation, error: createError } = await supabase
+      .from("conversations")
+      .insert({
+        listing_id: listing.id,
+        buyer_id: userId,
+        seller_id: listing.seller_id,
+      })
+      .select("id")
+      .single();
+
+    if (createError) {
+      console.error("CREATE CONVERSATION ERROR:", createError);
+      toast.error("Could not start a conversation.");
+      return;
+    }
+
+    router.push(`/messages/${newConversation.id}`);
+  }
   if (loading) {
     return (
       <main className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -240,7 +290,10 @@ export default function ListingPage() {
             </div>
 
             <div className="mt-10">
-              <button className="w-full flex items-center justify-center gap-3 bg-blue-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-blue-700 transition">
+              <button
+                onClick={handleContactSeller}
+                className="w-full flex items-center justify-center gap-3 bg-blue-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-blue-700 transition"
+              >
                 Contact Seller
               </button>
             </div>
