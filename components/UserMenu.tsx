@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { User } from "@supabase/supabase-js";
 import { FaChevronDown, FaSignOutAlt } from "react-icons/fa";
@@ -9,20 +9,136 @@ import { supabase } from "@/lib/supabase-client";
 export default function UserMenu() {
   const [user, setUser] = useState<User | null>(null);
   const [open, setOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const loadUnreadCount = useCallback(async (userId: string) => {
+    const { data: conversations, error: conversationError } = await supabase
+      .from("conversations")
+      .select("id")
+      .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`);
+
+    if (conversationError) {
+      console.error("LOAD CONVERSATIONS ERROR:", conversationError);
+      return;
+    }
+
+    const conversationIds = (conversations ?? []).map((c) => c.id);
+
+    if (conversationIds.length === 0) {
+      setUnreadCount(0);
+      return;
+    }
+
+    const { data: reads, error: readsError } = await supabase
+      .from("conversation_reads")
+      .select("conversation_id,last_read_at")
+      .eq("user_id", userId)
+      .in("conversation_id", conversationIds);
+
+    if (readsError) {
+      console.error("LOAD READ STATUS ERROR:", readsError);
+      return;
+    }
+
+    const readTimes = new Map(
+      (reads ?? []).map((r) => [r.conversation_id, r.last_read_at]),
+    );
+
+    let totalUnread = 0;
+
+    for (const conversationId of conversationIds) {
+      let query = supabase
+        .from("messages")
+        .select("id", { count: "exact", head: true })
+        .eq("conversation_id", conversationId)
+        .neq("sender_id", userId);
+
+      const lastReadAt = readTimes.get(conversationId);
+
+      if (lastReadAt) {
+        query = query.gt("created_at", lastReadAt);
+      }
+
+      const { count, error } = await query;
+
+      if (error) {
+        console.error("COUNT UNREAD MESSAGES ERROR:", error);
+        continue;
+      }
+
+      totalUnread += count ?? 0;
+    }
+
+    setUnreadCount(totalUnread);
+  }, []);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    let active = true;
+
+    async function initialize() {
+      const { data } = await supabase.auth.getUser();
+
+      if (!active) return;
+
       setUser(data.user);
-    });
+
+      if (data.user) {
+        await loadUnreadCount(data.user.id);
+      }
+    }
+
+    void initialize();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      if (!active) return;
+
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+
+      if (currentUser) {
+        void loadUnreadCount(currentUser.id);
+      } else {
+        setUnreadCount(0);
+      }
     });
 
-    return () => subscription.unsubscribe();
-  }, []);
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
+  }, [loadUnreadCount]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel(`unread-notifications-${user.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "messages",
+        },
+        (payload) => {
+          const message = payload.new as {
+            sender_id: string;
+            conversation_id: string;
+          };
+
+          if (message.sender_id !== user.id) {
+            void loadUnreadCount(user.id);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [user, loadUnreadCount]);
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -72,7 +188,7 @@ export default function UserMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-3 w-52 rounded-xl border border-gray-200 bg-white py-2 shadow-xl">
+        <div className="absolute right-0 z-50 mt-3 w-56 rounded-xl border border-gray-200 bg-white py-2 shadow-xl">
           <Link
             href="/wishlist"
             onClick={() => setOpen(false)}
@@ -83,10 +199,19 @@ export default function UserMenu() {
 
           <Link
             href="/messages"
-            onClick={() => setOpen(false)}
-            className="block px-4 py-3 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
+            onClick={() => {
+              setOpen(false);
+              setUnreadCount(0);
+            }}
+            className="flex items-center justify-between px-4 py-3 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
           >
-            💬 Messages
+            <span>💬 Messages</span>
+
+            {unreadCount > 0 && (
+              <span className="ml-3 min-w-6 rounded-full bg-blue-600 px-2 py-1 text-center text-xs font-bold text-white">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
           </Link>
 
           <Link
