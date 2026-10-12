@@ -127,6 +127,24 @@ export default function ChatPage() {
         toast.error("Failed to load messages.");
       } else {
         setMessages((messageData ?? []) as Message[]);
+
+        // Mark this conversation as read for the current user.
+        const { error: readError } = await supabase
+          .from("conversation_reads")
+          .upsert(
+            {
+              conversation_id: conversationId,
+              user_id: user.id,
+              last_read_at: new Date().toISOString(),
+            },
+            {
+              onConflict: "conversation_id,user_id",
+            },
+          );
+
+        if (readError) {
+          console.error("MARK CONVERSATION READ ERROR:", readError);
+        }
       }
 
       setLoading(false);
