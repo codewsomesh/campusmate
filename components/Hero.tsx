@@ -26,14 +26,14 @@ export default function Hero() {
             href="/"
             className="bg-white text-blue-700 font-semibold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
           >
-            Browse
+            Browse Listings
           </Link>
 
           <Link
             href="/"
             className="border-2 border-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-blue-700 transition-all duration-300"
           >
-            Post a Listing
+            Post
           </Link>
         </div>
 
