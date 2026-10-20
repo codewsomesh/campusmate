@@ -26,7 +26,7 @@ export default function Hero() {
             href="/"
             className="bg-white text-blue-700 font-semibold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
           >
-            Browse Listings
+            Browse
           </Link>
 
           <Link
