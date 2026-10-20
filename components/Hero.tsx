@@ -33,7 +33,7 @@ export default function Hero() {
             href="/"
             className="border-2 border-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-blue-700 transition-all duration-300"
           >
-            Post
+            Post a Listing
           </Link>
         </div>
 
