@@ -14,11 +14,7 @@ export default function Hero() {
         </h2>
 
         {/* Description */}
-        <p className="mt-8 max-w-3xl mx-auto text-lg md:text-xl text-blue-100 leading-8">
-          CampusMate is a student-first marketplace where you can buy, sell,
-          rent, and discover everything from textbooks and gadgets to fashion,
-          ride sharing, and tutoring services—all within your college community.
-        </p>
+        <p className="mt-8 max-w-3xl mx-auto text-lg md:text-xl text-blue-100 leading-8"></p>
 
         {/* Buttons */}
         <div className="mt-12 flex flex-col sm:flex-row justify-center gap-5">
