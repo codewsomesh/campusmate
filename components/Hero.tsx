@@ -15,9 +15,9 @@ export default function Hero() {
 
         {/* Description */}
         <p className="mt-8 max-w-3xl mx-auto text-lg md:text-xl text-blue-100 leading-8">
-          CampusMate is your go-to platform for buying, selling, and renting
-          items within your campus community. Connect with fellow students, find
-          great deals, and make the most of your college experience.
+          CampusMate is a student-first marketplace where you can buy, sell,
+          rent, and discover everything from textbooks and gadgets to fashion,
+          ride sharing, and tutoring services—all within your college community.
         </p>
 
         {/* Buttons */}
