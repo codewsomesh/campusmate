@@ -259,18 +259,20 @@ export default function ListingPage() {
                   </p>
                 </div>
               </div>
-
               <div className="flex items-center gap-4">
-                <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50">
                   <FaUser className="text-blue-600" />
                 </div>
 
                 <div>
                   <p className="text-sm text-gray-400">Seller</p>
 
-                  <p className="font-semibold text-gray-700">
+                  <Link
+                    href={`/seller/${listing.seller_id}`}
+                    className="font-semibold text-blue-600 transition-colors hover:text-blue-800 hover:underline"
+                  >
                     {listing.seller_name}
-                  </p>
+                  </Link>
                 </div>
               </div>
 
